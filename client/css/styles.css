@@ -1,0 +1,82 @@
+#load {
+  width: 100px;
+  height: 100px;
+}
+
+#panel-heading-info, #panel-heading, #back {
+  background-color: #d11141;
+  text-align: center;
+  color: white;
+}
+
+#load-results {
+  position: relative;
+  display: inline;
+  bottom: 19px;
+  left: 148px;
+}
+
+#container {
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+#searchbox {
+  display: inline;
+  position: relative;
+  border-radius: 5px;
+  top: 8px;
+}
+
+#submit {
+  position: relative;
+  top: 5px;
+  /*width: 80px;*/
+}
+
+#search {
+  border-radius: 10px;
+}
+
+#header {
+  color: #d11141;
+  /*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;*/
+  padding-top: 10px;
+  position: relative;
+  left: 20px;
+}
+
+li a{
+  color: #d11141 ;
+}
+
+#fee { white-space: nowrap; }
+
+.ui-helper-hidden-accessible { position: absolute; left:-999em; }
+
+.ui-menu-item {
+display: block;
+position: relative;
+top: 3px;
+right: 38px;
+padding: 1px;
+width: 123%;
+}
+
+.row-select {
+  border-radius: 5px;
+  padding-right: 20px;
+  /*  padding-left: 10px;*/
+  /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+  background: #d11141;
+  outline:none;
+}
+
+.row-select a {
+  color: white;
+}
+
+.ui-highlight
+{
+    font-weight: bold;
+}
