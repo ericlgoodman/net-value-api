@@ -4,12 +4,12 @@
 
 //Return base URL for search API
 function getSearchApiUrl() {
-  return "http://127.0.0.1:5000/api/search/";
+  return "http://goodso37.pythonanywhere.com/api/search/";
 }
 
 //Return base URL for player API
 function getPlayerApiUrl() {
-  return "http://127.0.0.1:5000/api/player";
+  return "http://goodso37.pythonanywhere.com/api/player/";
 }
 
 //Make the spinning wheel at target_id, with desired radius

@@ -142,3 +142,5 @@ def search(queryString):
                     name+="|duplicate"
                     results[name] = (name, team, value, link)
     return results
+
+print search("rooney")
