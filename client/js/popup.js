@@ -1,18 +1,32 @@
-/**
+/***********************
  * @author Eric Goodman
- */
+ ***********************
+*/
 
-//Return base URL for search API
+/******************************************************************************
+
+/**
+ * URL for search API
+ * @return {string}
+ */
 function getSearchApiUrl() {
   return "http://goodso37.pythonanywhere.com/api/search/";
 }
 
-//Return base URL for player API
+/**
+ * URL for the player API
+ * @return {string}
+ */
 function getPlayerApiUrl() {
   return "http://goodso37.pythonanywhere.com/api/player/";
 }
 
-//Make the spinning wheel at target_id, with desired radius
+/**
+ * Make the loading spinner
+ * @param  {string} target_id The ID of the element to append to
+ * @param  {number} rad The desired radius of the spinner
+ * @return {undefined}
+ */
 function makeSpinner(target_id, rad) {
   var opts = {
   lines: 7 // The number of lines to draw
@@ -40,8 +54,11 @@ function makeSpinner(target_id, rad) {
   var spinner = new Spinner(opts).spin(target);
 }
 
-
-//Function to clean up players' names in case there are duplicate names
+/**
+ * Function for correcting client side duplicate names.
+ * @param  {string} name The player's name
+ * @return {string} Cleaned name
+ */
 function cleanPlayerName(name) {
   if (name.includes("|")) {
     name = name.split("|")[0];
@@ -49,8 +66,11 @@ function cleanPlayerName(name) {
   return name;
 }
 
-//Function to normalize the display of players' values
-//Returns the string repr. of the float value of a player
+/**
+ * Function to normalize the display of players' values.
+ * @param  {number} float The value of a player
+ * @return {string} The string representation of a player's value
+ */
 function valueDisplay(float) {
   var display = "";
   //if millions of euros
@@ -67,7 +87,13 @@ function valueDisplay(float) {
   return display;
 }
 
-//Create the HTML for displaying a player page
+/**
+ * Create the HTML for displaying a player page
+ * @param  {Object} data JSON data for a player
+ * @param  {string} name Player's name
+ * @param  {string} team Player's club
+ * @return {undefined}
+ */
 function loadPlayer(data, name, team) {
   //Parse JSON
   data = data.query_results;
@@ -104,7 +130,7 @@ function loadPlayer(data, name, team) {
 
     //Append the old HTML
     $("#container").append("<div id='search' class='form-group'>" +
-    "<h3 id='header'>Transfer Val</h3><input id='searchbox'" +
+    "<h3 id='header'>Net Value</h3><input id='searchbox'" +
     "class='form-control' aria-describedby='sizing-addon1'" +
     "placeholder='Type a player name...' type='text' name='searchbox'" +
     "value=''><input type='hidden' id='playerid'><p id='playerval'></p></div>");
@@ -204,7 +230,13 @@ function loadPlayer(data, name, team) {
 
 }
 
-//Make API call for a player
+/**
+ * Make API call for a player
+ * @param  {string} url Desired URL of ajax request
+ * @param  {string} name Player's name
+ * @param  {string} team Player's team
+ * @return {undefined}
+ */
 function makeRequest(url, name, team) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url, true);
@@ -220,7 +252,13 @@ function makeRequest(url, name, team) {
   xhr.send();
 }
 
-//Clear the search, make request to player API
+/**
+ * Clear the search, begin request to player API
+ * @param  {string} link The path to a specified player's TransferMarkt page
+ * @param  {string} name Player's name
+ * @param  {string} team Player's team
+ * @return {undefined}
+ */
 function changeToPlayerView(link, name, team) {
   //Clear contents of DOM
   var searchNode = document.getElementById('container');
@@ -246,7 +284,9 @@ function changeToPlayerView(link, name, team) {
   makeRequest(q, name, team);
 }
 
-//Function to add autocomplete to the search box
+/**
+ * Adds autocomplete functionality to the search box
+ */
 function addAutoComplete() {
   $("#searchbox").autocomplete({
     appendTo: "#container", //where to place
@@ -254,8 +294,10 @@ function addAutoComplete() {
     minLength: 2, //min characters before request is made
     messages: {
       //This gets rid of default text saying no search results were found
-      noResults: '',
-      results: function() {}
+      messages: {
+        noResults: '',
+        results: function() {}
+    }
     },
     //Make ajax request
     source: function(request, response) {
@@ -309,7 +351,6 @@ function addAutoComplete() {
 
 
     focus: function( event, ui ) {
-      //Called when the user traverses the list of players
       $("#searchbox").val(cleanPlayerName(ui.item.label));
       var nodes = event.currentTarget.childNodes;
       for (var i = 0; i<nodes.length; i++) {
@@ -342,15 +383,19 @@ function addAutoComplete() {
 
 }
 
-//Bind listener
+/**
+ * Bind listener
+ */
 document.addEventListener('DOMContentLoaded', function() {
   addAutoComplete();
 });
 
-//Code to get rid of fuzzy behavior when clicking outside the extension window
+/**
+ * Code to get rid of fuzzy behavior when clicking outside the extension window
+ */
 document.addEventListener("focus",function() {
     windowFocus = true;
-})
+});
 document.addEventListener("blur",function() {
     windowFocus = false;
-})
+});

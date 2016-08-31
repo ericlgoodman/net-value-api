@@ -1,6 +1,8 @@
 from data import getInfoFromId, search, contains_digits
 from flask import Flask, jsonify, abort
 
+___author___ = "Eric Goodman"
+
 app = Flask(__name__)
 
 #Search API
