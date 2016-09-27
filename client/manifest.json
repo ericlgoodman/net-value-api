@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Transfer Val",
-  "version": "1.0",
+  "name": "Net Value",
+  "version": "0.0.1",
 
-  "description": "Tool for searching soccer / football player's transfer valuations",
+  "description": "Tool for searching soccer / football player's transfer valuations. All data provided by Transfermarkt.",
 
   "icons": {
     "16": "icon16.png",
@@ -21,6 +21,8 @@
     "activeTab",
     "http://goodso37.pythonanywhere.com/",
     "https://goodso37.pythonanywhere.com/",
+    "http://tmssl.akamaized.net/",
+    "https://tmssl.akamaized.net/",
     "http://127.0.0.1:5000/",
     "https://127.0.0.1:5000/"
   ]

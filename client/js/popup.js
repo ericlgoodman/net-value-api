@@ -103,7 +103,7 @@ function loadPlayer(data, name, team) {
   var nationality = data[1];
   var position = data[2];
   var age = data[3];
-  var image_link = data[4];
+  var image_link = data[4]
   var transfers = data[5];
 
   //Remove the spinner
@@ -116,8 +116,8 @@ function loadPlayer(data, name, team) {
     "type='button' class='btn btn-default navbar-btn center-block'>" + "Back" +
     "</button></div></div></nav>" + "<h2 id='playername' class='navbar-text" +
     " text-center'>" + name + "</h2>" + "<img id='playerimage'" +
-    "class='img-rounded img-responsive center-block' src=" + image_link +
-    " alt=" + name + ">" + "<h1 class='text-center'>Value: " + value + "</h1>");
+    "class='img-rounded img-responsive center-block' src=http://" + image_link +
+    "alt=" + name + ">" + "<h1 class='text-center'>Value: " + value + "</h1>");
 
   //Functionality for back button
   $("#back").click(function(e) {
