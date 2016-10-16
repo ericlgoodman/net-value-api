@@ -22,8 +22,6 @@
     "http://goodso37.pythonanywhere.com/",
     "https://goodso37.pythonanywhere.com/",
     "http://tmssl.akamaized.net/",
-    "https://tmssl.akamaized.net/",
-    "http://127.0.0.1:5000/",
-    "https://127.0.0.1:5000/"
+    "https://tmssl.akamaized.net/"
   ]
 }

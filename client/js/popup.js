@@ -115,7 +115,7 @@ function loadPlayer(data, name, team) {
     "class='container'><div class='navbar-header'><button id='back'" +
     "type='button' class='btn btn-default navbar-btn center-block'>" + "Back" +
     "</button></div></div></nav>" + "<h2 id='playername' class='navbar-text" +
-    " text-center'>" + name + "</h2>" + "<img id='playerimage'" +
+    " text-center'>" + cleanPlayerName(name) + "</h2>" + "<img id='playerimage'" +
     "class='img-rounded img-responsive center-block' src=http://" + image_link +
     "alt=" + name + ">" + "<h1 class='text-center'>Value: " + value + "</h1>");
 

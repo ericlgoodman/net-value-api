@@ -12,7 +12,7 @@
 #load-results {
   position: relative;
   display: inline;
-  bottom: 19px;
+  bottom: 27px;
   left: 148px;
 }
 
@@ -25,7 +25,7 @@
   display: inline;
   position: relative;
   border-radius: 5px;
-  top: 8px;
+  /*top: 8px;*/
 }
 
 #submit {
@@ -41,7 +41,7 @@
 #header {
   color: #d11141;
   /*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;*/
-  padding-top: 10px;
+  /*padding-top: 10px;*/
   position: relative;
   left: 32px;
 }
