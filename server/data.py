@@ -3,20 +3,24 @@ Script to retrieve data from Transfermarkt. Used for the search and player API
 """
 
 import urllib
-import urllib2
-import requests
 import re
 from bs4 import BeautifulSoup
-import httplib
 
 __author__ = "Eric Goodman"
+
 
 class AppURLOpener(urllib.FancyURLopener):
     """
     Class to disguise server requests as incoming from Mozilla Firefox
     """
     version = "Mozilla/5.0"
+
+
 urllib._urlopener = AppURLOpener()
+
+"""
+~~~ Functions ~~~
+"""
 
 
 def contains_digits(d):
@@ -27,14 +31,12 @@ def contains_digits(d):
         d: A string.
 
     Returns:
-        A boolean indicating whether or not the string contains one or more
-        digits.
+        True if the string contains digits
     """
-    _digits = re.compile('\d')
-    return bool(_digits.search(d))
+    return bool(re.compile('\d').search(d))
 
 
-def getTableInfo(table):
+def get_player_data_from_table(table):
     """
     Gets a player's age, position, and nationality from a table of data.
 
@@ -47,24 +49,26 @@ def getTableInfo(table):
         nationality.
     """
     text = table.text
+
     try:
-        age = text.split("Age:")[1].strip().split("\n")[0] \
-            .encode("ascii", "ignore")
+        age = text.split("Age:")[1].strip().split("\n")[0].encode("ascii", "ignore")
     except:
         age = "N/A"
+
     try:
-        nationality = text.split("Nationality:")[1].strip().split("\n")[0] \
-            .strip()
+        nationality = text.split("Nationality:")[1].strip().split("\n")[0].strip()
     except:
         nationality = "N/A"
+
     try:
-        position = text.split("Position:")[1].strip().split("\n")[0].strip() \
-            .encode("ascii", "ignore")
+        position = text.split("Position:")[1].strip().split("\n")[0].strip().encode("ascii", "ignore")
     except:
         position = "N/A"
+
     return (nationality, position, age)
 
-def getValue(text):
+
+def player_value_to_string(text):
     """
     Parses the player's value from a string.
 
@@ -73,22 +77,26 @@ def getValue(text):
 
     Returns:
         A float representing the player's value. If the value cannot be parsed,
-        returns -1.
+        returns None.
     """
-    try:
-        if "Free" in text:
-            value = 0
-        elif "M" in text:
-            value = float(text.split("M")[0].replace(",", "."))
-        elif "T" in text:
-            value = float(text.split("T")[0].replace(",", "."))/1000
-        else:
-            value = -1
-        return value
-    except:
-        return -1
 
-def getTransferHistory(table):
+    # Free transfer
+    if "Free" in text:
+        value = 0
+
+    elif "M" in text:
+        value = float(text.split("M")[0].replace(",", "."))
+
+    elif "T" in text:
+        value = float(text.split("T")[0].replace(",", ".")) / 1000
+
+    else:
+        return None
+
+    return value
+
+
+def get_transfer_history_from_table(table):
     """
     Gets a player's transfer history, storing the results in a list of tuples.
 
@@ -102,7 +110,6 @@ def getTransferHistory(table):
     """
     transfers = []
     for row in table:
-        #Get all the cells
         cells = row.find_all("td")
 
         transfer_date = cells[1].text
@@ -110,13 +117,14 @@ def getTransferHistory(table):
         destination = cells[6].a.img['alt']
 
         raw_fee = cells[11].text.encode("ascii", "ignore")
-        fee = getValue(raw_fee)
+        fee = player_value_to_string(raw_fee)
 
-        if fee != -1:
+        if fee is not None:
             transfers.append((transfer_date, origin, destination, fee))
     return transfers
 
-def getPlayerInfo(url):
+
+def get_player_info(url):
     """
     Overarching method to extract all relevant data regarding a player.
 
@@ -127,36 +135,33 @@ def getPlayerInfo(url):
         A tuple, containing a player's value, nationality, position, age, a link
         to an image, and a list of their transfer history.
     """
-    #the HTML of the player's page
+
+
     html = BeautifulSoup(urllib.urlopen(url), 'html.parser')
 
-    #Transfer history
+    # Transfer history
     transfer_rows = html.find_all("tr", class_="zeile-transfer")
-    transfers = getTransferHistory(transfer_rows)
+    transfers = get_transfer_history_from_table(transfer_rows)
 
-    #Player image
+    # Player image
     image_link = html.find("div", class_="dataBild").img['src']
 
-    #Player value div
-    value_text = html.find("div", class_="dataMarktwert").a.text \
-        .split("Last")[0]
-    value = getValue(value_text)
+    # Player value div
+    value_text = html.find("div", class_="dataMarktwert").a.text.split("Last")[0]
+    value = player_value_to_string(value_text)
 
-    #Table where other data is located
+    # Table where other data is located
     table = html.find("div", class_="spielerdaten").table
+    table_data = get_player_data_from_table(table)
 
-    #Get the info
-    info = getTableInfo(table)
+    nationality = table_data[0]
+    position = table_data[1]
+    age = table_data[2]
 
-    #Assign
-    nationality = info[0]
-    position = info[1]
-    age = info[2]
-
-    #Return
     return (value, nationality, position, age, image_link, transfers)
 
-def getInfoFromId(_id):
+
+def all_player_data_from_id(_id):
     """
     Helper method for getPlayerInfo. Implemented to avoid requesting the server
     multiple times for the same player.
@@ -169,7 +174,8 @@ def getInfoFromId(_id):
         getPlayerInfo
     """
     url = "http://www.transfermarkt.com/" + _id
-    return getPlayerInfo(url)
+    return get_player_info(url)
+
 
 def search(query):
     """
@@ -184,46 +190,40 @@ def search(query):
         player name + "| duplicate"), the values are tuples containing the
         player's name, club, value, and a link to their Transfermarkt profile.
     """
-
-    new_query = "http://www.transfermarkt.de/schnellsuche/ergebnis/schnell" \
-        "suche?query=" + query + "&x=0&y=0"
-
-    #Get the HTML
     html = BeautifulSoup(urllib.urlopen(query), 'html.parser')
-
     results = {}
-    if html.find("table", class_="items"):
-        table = html.find("table", class_="items").tbody
 
-        #Iterate over every player
-        for player in table.find_all(True, {'class':['odd', 'even']}):
-            if player.find("a", class_="spielprofil_tooltip"):
-                name = player.find("a", class_="spielprofil_tooltip").text
-                link = player.find("a", class_="spielprofil_tooltip")['href']
-            else:
-                name = None
-                link = None
+    if not html.find("table", class_="items"):
+        return {}
 
-            if player.find("a", "vereinprofil_tooltip"):
-                team = player.find("a", "vereinprofil_tooltip").text \
-                    .encode("ascii", "ignore")
-            else:
-                team = None
+    table = html.find("table", class_="items").tbody
 
-            if player.find("td", class_="rechts hauptlink"):
-                value = player.find("td", class_="rechts hauptlink").text \
-                    .replace(",", ".").encode("ascii", "ignore")
-                value = getValue(value)
-                if value == -1:
-                    value = None
-            else:
-                value = None
+    for player in table.find_all(True, {'class': ['odd', 'even']}):
+        if player.find("a", class_="spielprofil_tooltip"):
+            name = player.find("a", class_="spielprofil_tooltip").text
+            link = player.find("a", class_="spielprofil_tooltip")['href']
+        else:
+            name = None
+            link = None
 
-            if name is not None and link is not None and team is not None and \
-                value is not None:
-                if name not in results:
-                    results[name] = (name, team, value, link)
-                else:
-                    name+="|duplicate"
-                    results[name] = (name, team, value, link)
+        if player.find("a", "vereinprofil_tooltip"):
+            team = player.find("a", "vereinprofil_tooltip").text.encode("ascii", "ignore")
+        else:
+            team = None
+
+        if player.find("td", class_="rechts hauptlink"):
+            raw_player_value = player.find("td", class_="rechts hauptlink").text.replace(",", ".").encode("ascii",
+                "ignore")
+            player_value = player_value_to_string(raw_player_value)
+
+        else:
+            player_value = None
+
+        if name is not None and link is not None and team is not None and player_value is not None:
+            if name not in results:
+                results[name] = (name, team, raw_player_value, link)
+
+            else:  # Duplicate
+                name += "|duplicate"
+                results[name] = (name, team, raw_player_value, link)
     return results

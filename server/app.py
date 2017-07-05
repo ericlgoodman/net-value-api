@@ -1,4 +1,4 @@
-from data import getInfoFromId, search, contains_digits
+from data import all_player_data_from_id, search, contains_digits
 from flask import Flask, jsonify, abort
 
 ___author___ = "Eric Goodman"
@@ -19,8 +19,8 @@ def get_query(query):
 @app.route('/api/player/<string:query>', methods=['GET'])
 def get_player(query):
     query = query.replace("|","/")
-    results = getInfoFromId(query)
+    results = all_player_data_from_id(query)
     return jsonify({'query_results':results})
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run()
