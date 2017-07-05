@@ -1,5 +1,8 @@
-flask
+client/[Ii]con*
+*.bash_profile
+server/flask
 *.pyc
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

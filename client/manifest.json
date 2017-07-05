@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Net Value",
-  "version": "0.0.1",
+  "version": "0.0.2",
 
   "description": "Tool for searching soccer / football player's transfer valuations. All data provided by Transfermarkt.",
 

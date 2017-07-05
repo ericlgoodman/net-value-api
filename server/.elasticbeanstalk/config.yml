@@ -1,0 +1,11 @@
+branch-defaults:
+  default:
+    environment: null
+    group_suffix: null
+global:
+  application_name: server
+  default_ec2_keyname: null
+  default_platform: python2.7
+  default_region: us-west-2
+  profile: eb-cli
+  sc: null
