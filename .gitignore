@@ -1,9 +1,12 @@
 client/[Ii]con*
 *.bash_profile
 server/flask
+client/.*
 *.pyc
+.idea
+*.zip
 
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
+server/.elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
