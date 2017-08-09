@@ -7,6 +7,5 @@ client/.*
 *.zip
 
 # Elastic Beanstalk Files
-server/.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+src/.elasticbeanstalk
+
