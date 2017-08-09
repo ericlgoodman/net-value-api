@@ -1,5 +1,6 @@
 from data import all_player_data_from_id, search_for_player, contains_digits
 from flask import Flask, jsonify, abort
+import os
 
 ___author___ = "Eric Goodman"
 
@@ -23,4 +24,5 @@ def get_player(query):
     return jsonify({'query_results':results})
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
