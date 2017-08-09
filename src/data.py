@@ -1,13 +1,8 @@
-"""
-Script to retrieve data from Transfermarkt. Used for the search and player API
-"""
-
 import urllib
 import re
 from bs4 import BeautifulSoup
 
 __author__ = "Eric Goodman"
-
 
 class AppURLOpener(urllib.FancyURLopener):
     """
@@ -15,13 +10,11 @@ class AppURLOpener(urllib.FancyURLopener):
     """
     version = "Mozilla/5.0"
 
-
 urllib._urlopener = AppURLOpener()
 
 """
-~~~ Functions ~~~
+=== FUNCTIONS ===
 """
-
 
 def contains_digits(d):
     """
@@ -136,7 +129,6 @@ def get_player_info(url):
         to an image, and a list of their transfer history.
     """
 
-
     html = BeautifulSoup(urllib.urlopen(url), 'html.parser')
 
     # Transfer history
@@ -177,12 +169,12 @@ def all_player_data_from_id(_id):
     return get_player_info(url)
 
 
-def search(query):
+def search_for_player(player_name):
     """
     Function for search API.
 
     Args:
-        query: A string containing the search term.
+        player_name: A string containing the search term.
 
     Returns:
         A dictionary. The keys are the names of the player's as strings (unless
@@ -190,7 +182,9 @@ def search(query):
         player name + "| duplicate"), the values are tuples containing the
         player's name, club, value, and a link to their Transfermarkt profile.
     """
-    html = BeautifulSoup(urllib.urlopen(query), 'html.parser')
+
+    url = 'http://www.transfermarkt.de/schnellsuche/ergebnis/schnellsuche?query={}&x=0&y=0'.format(player_name)
+    html = BeautifulSoup(urllib.urlopen(url), 'html.parser')
     results = {}
 
     if not html.find("table", class_="items"):
@@ -219,7 +213,7 @@ def search(query):
         else:
             player_value = None
 
-        if name is not None and link is not None and team is not None and player_value is not None:
+        if name and link and team and player_value:
             if name not in results:
                 results[name] = (name, team, raw_player_value, link)
 

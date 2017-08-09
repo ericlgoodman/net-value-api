@@ -1,4 +1,4 @@
-from data import all_player_data_from_id, search, contains_digits
+from data import all_player_data_from_id, search_for_player, contains_digits
 from flask import Flask, jsonify, abort
 
 ___author___ = "Eric Goodman"
@@ -6,13 +6,13 @@ ___author___ = "Eric Goodman"
 app = Flask(__name__)
 
 #Search API
-@app.route('/api/search/<string:query>', methods=['GET'])
-def get_query(query):
-    if len(query) == 0:
+@app.route('/api/search/<player_name>', methods=['GET'])
+def query_for_player_name(player_name):
+    if not player_name:
         abort(404)
-    if contains_digits(query):
+    if contains_digits(player_name):
         abort(400)
-    results = search(query)
+    results = search_for_player(player_name)
     return jsonify({'results':results})
 
 #Player API
