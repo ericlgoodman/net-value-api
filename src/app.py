@@ -13,15 +13,15 @@ def query_for_player_name(player_name):
         abort(404)
     if contains_digits(player_name):
         abort(400)
-    results = search_for_player(player_name)
-    return jsonify({'results':results})
+    data = search_for_player(player_name)
+    return jsonify(data)
 
 #Player API
-@app.route('/api/player/<string:query>', methods=['GET'])
-def get_player(query):
-    query = query.replace("|","/")
-    results = all_player_data_from_id(query)
-    return jsonify({'query_results':results})
+@app.route('/api/player/<player_id>', methods=['GET'])
+def get_player(player_id):
+    player_id = player_id.replace("|", "/")
+    data = all_player_data_from_id(player_id)
+    return jsonify(data)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
